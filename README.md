@@ -1,4 +1,4 @@
-##Run
+## Run
 
 Run using Cargo using the `-d` or `--day` flag to choose a day's challenge code to run:
 
@@ -6,7 +6,7 @@ Run using Cargo using the `-d` or `--day` flag to choose a day's challenge code 
 cargo run -- -d 1
 ```
 
-##Test
+## Test
 
 Run tests with Cargo:
 
