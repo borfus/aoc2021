@@ -1,7 +1,7 @@
 use std::fs;
 
 pub fn run() {
-    let lines = fs::read_to_string("input/d1p1.txt").unwrap();
+    let lines = fs::read_to_string("input/day1.txt").unwrap();
     let lines = lines.lines();
 
     let mut measurements: Vec<i32> = vec![];
