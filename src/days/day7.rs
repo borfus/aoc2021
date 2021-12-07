@@ -9,7 +9,7 @@ pub fn run() {
 }
 
 fn least_fuel(data: &String, increasing: bool) -> i32 {
-    let crabs: Vec<i32> = data.trim().split(',').map(|n| n.parse::<i32>().unwrap()).collect();
+    let crabs: Vec<i32> = data.trim().split(',').map(|n| n.parse().unwrap()).collect();
 
     let (mut min, mut max) = (i32::MAX, i32::MIN);
     for crab in &crabs {
