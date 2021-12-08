@@ -68,13 +68,6 @@ fn output_digits(data: &Vec<String>) -> i32 {
                     three.push(*char_map.get(&'f').unwrap());
                     three.push(*char_map.get(&'g').unwrap());
 
-                    let mut five = String::new();
-                    five.push(*char_map.get(&'a').unwrap());
-                    five.push(*char_map.get(&'b').unwrap());
-                    five.push(*char_map.get(&'d').unwrap());
-                    five.push(*char_map.get(&'f').unwrap());
-                    five.push(*char_map.get(&'g').unwrap());
-
                     for c in word.chars() {
                         if !two.contains(c) {
                             is_two = false;
