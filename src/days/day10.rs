@@ -2,18 +2,13 @@ use std::fs;
 
 pub fn run() {
     let lines = fs::read_to_string("input/day10.txt").unwrap();
-    let lines = lines.lines();
+    let lines = lines.lines().collect();
 
-    let mut data: Vec<Vec<char>> = vec![];
-    for line in lines {
-        data.push(String::from(line).chars().collect());
-    }
-
-    println!("Day 10 - Part 1: {}", find_line_score(&data, false));
-    println!("Day 10 - Part 2: {}", find_line_score(&data, true));
+    println!("Day 10 - Part 1: {}", find_line_score(&lines, false));
+    println!("Day 10 - Part 2: {}", find_line_score(&lines, true));
 }
 
-fn find_line_score(data: &Vec<Vec<char>>, ignore_corrupt: bool) -> i64 {
+fn find_line_score(data: &Vec<&str>, ignore_corrupt: bool) -> i64 {
     let mut result = 0;
     let mut incomplete_line_scores: Vec<i64> = vec![];
 
@@ -23,17 +18,17 @@ fn find_line_score(data: &Vec<Vec<char>>, ignore_corrupt: bool) -> i64 {
         let mut illegal_char = ' '; 
 
         let mut corrupt = false;
-        for c in line {
-            let inverse = match_inverse(*c);
+        for c in line.chars() {
+            let inverse = match_inverse(c);
             match c {
                 '(' | '[' | '{' | '<' => {
-                    input.push(*c);
+                    input.push(c);
                     next_expected_close.push(inverse.unwrap());
                 },
                 ')' | ']' | '}' | '>' => {
                     let top = next_expected_close.pop().unwrap();
-                    if top != *c {
-                        illegal_char = *c;
+                    if top != c {
+                        illegal_char = c;
                         next_expected_close.push(top);
                         corrupt = true;
                         break;
@@ -99,17 +94,17 @@ fn match_inverse(c: char) -> Option<char> {
 mod tests {
     #[test]
     fn part1() {
-        let data: Vec<String> = vec![
-            String::from("[({(<(())[]>[[{[]{<()<>>"),
-            String::from("[(()[<>])]({[<{<<[]>>("),
-            String::from("{([(<{}[<>[]}>{[]{[(<()>"),
-            String::from("(((({<>}<{<{<>}{[]{[]{}"),
-            String::from("[[<[([]))<([[{}[[()]]]"),
-            String::from("[{[{({}]{}}([{[{{{}}([]"),
-            String::from("{<[[]]>}<{[{[{[]{()[[[]"),
-            String::from("[<(<(<(<{}))><([]([]()"),
-            String::from("<{([([[(<>()){}]>(<<{{"),
-            String::from("<{([{{}}[<[[[<>{}]]]>[]]")
+        let data: Vec<&str> = vec![
+            "[({(<(())[]>[[{[]{<()<>>",
+            "[(()[<>])]({[<{<<[]>>(",
+            "{([(<{}[<>[]}>{[]{[(<()>",
+            "(((({<>}<{<{<>}{[]{[]{}",
+            "[[<[([]))<([[{}[[()]]]",
+            "[{[{({}]{}}([{[{{{}}([]",
+            "{<[[]]>}<{[{[{[]{()[[[]",
+            "[<(<(<(<{}))><([]([]()",
+            "<{([([[(<>()){}]>(<<{{",
+            "<{([{{}}[<[[[<>{}]]]>[]]"
         ];
         let expected = 26397;
         let actual = super::find_line_score(&data, false);
@@ -118,17 +113,17 @@ mod tests {
 
     #[test]
     fn part2() {
-        let data: Vec<String> = vec![
-            String::from("[({(<(())[]>[[{[]{<()<>>"),
-            String::from("[(()[<>])]({[<{<<[]>>("),
-            String::from("{([(<{}[<>[]}>{[]{[(<()>"),
-            String::from("(((({<>}<{<{<>}{[]{[]{}"),
-            String::from("[[<[([]))<([[{}[[()]]]"),
-            String::from("[{[{({}]{}}([{[{{{}}([]"),
-            String::from("{<[[]]>}<{[{[{[]{()[[[]"),
-            String::from("[<(<(<(<{}))><([]([]()"),
-            String::from("<{([([[(<>()){}]>(<<{{"),
-            String::from("<{([{{}}[<[[[<>{}]]]>[]]")
+        let data: Vec<&str> = vec![
+            "[({(<(())[]>[[{[]{<()<>>",
+            "[(()[<>])]({[<{<<[]>>(",
+            "{([(<{}[<>[]}>{[]{[(<()>",
+            "(((({<>}<{<{<>}{[]{[]{}",
+            "[[<[([]))<([[{}[[()]]]",
+            "[{[{({}]{}}([{[{{{}}([]",
+            "{<[[]]>}<{[{[{[]{()[[[]",
+            "[<(<(<(<{}))><([]([]()",
+            "<{([([[(<>()){}]>(<<{{",
+            "<{([{{}}[<[[[<>{}]]]>[]]"
         ];
         let expected = 288957;
         let actual = super::find_line_score(&data, true);
