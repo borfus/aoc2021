@@ -4,41 +4,36 @@ pub fn run() {
     let lines = fs::read_to_string("input/day10.txt").unwrap();
     let lines = lines.lines();
 
-    let mut data: Vec<String> = vec![];
+    let mut data: Vec<Vec<char>> = vec![];
     for line in lines {
-        data.push(String::from(line));
+        data.push(String::from(line).chars().collect());
     }
 
     println!("Day 10 - Part 1: {}", find_line_score(&data, false));
     println!("Day 10 - Part 2: {}", find_line_score(&data, true));
 }
 
-fn find_line_score(data: &Vec<String>, ignore_corrupt: bool) -> i64 {
+fn find_line_score(data: &Vec<Vec<char>>, ignore_corrupt: bool) -> i64 {
     let mut result = 0;
     let mut incomplete_line_scores: Vec<i64> = vec![];
-    let mut lines: Vec<Vec<char>> = vec![];
 
     for line in data {
-        lines.push(line.chars().collect());
-    }
-
-    for line in lines {
         let mut input: Vec<char> = vec![];
         let mut next_expected_close: Vec<char> = vec![];
         let mut illegal_char = ' '; 
 
         let mut corrupt = false;
         for c in line {
-            let inverse = match_inverse(c);
+            let inverse = match_inverse(*c);
             match c {
                 '(' | '[' | '{' | '<' => {
-                    input.push(c);
+                    input.push(*c);
                     next_expected_close.push(inverse.unwrap());
                 },
                 ')' | ']' | '}' | '>' => {
                     let top = next_expected_close.pop().unwrap();
-                    if top != c {
-                        illegal_char = c;
+                    if top != *c {
+                        illegal_char = *c;
                         next_expected_close.push(top);
                         corrupt = true;
                         break;
