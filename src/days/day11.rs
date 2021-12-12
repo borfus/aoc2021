@@ -10,7 +10,7 @@ pub fn run() {
     println!("Day 11 - Part 2: {}", count_flashes(&lines, 100, true));
 }
 
-fn count_flashes(data: &Vec<&str>, steps: i32, all_flash: bool) -> i32 {
+fn count_flashes(data: &Vec<&str>, steps: i32, check_for_all_flash: bool) -> i32 {
     let mut result = 0;
 
     let octopus_grid: Rc<RefCell<Vec<Vec<i32>>>> = Rc::new(RefCell::new(vec![]));
@@ -22,42 +22,45 @@ fn count_flashes(data: &Vec<&str>, steps: i32, all_flash: bool) -> i32 {
         octopus_grid.borrow_mut().push(row);
     }
 
+    let rows = octopus_grid.borrow().len();
+    let columns = octopus_grid.borrow()[0].len();
+
     let mut step = 0;
     let mut finished = false;
     while !finished {
         step += 1;
-        for i in 0..10 {
-            for j in 0..10 {
-                octopus_grid.borrow_mut()[i][j] += 1;
+        for row in 0..rows {
+            for column in 0..columns {
+                octopus_grid.borrow_mut()[row][column] += 1;
             }
         }
 
-        for i in 0..10 {
-            for j in 0..10 {
-                if octopus_grid.borrow()[i][j] == 10 {
-                    result += flash(Rc::clone(&octopus_grid), 0, i, j);
+        for row in 0..rows {
+            for column in 0..columns {
+                if octopus_grid.borrow()[row][column] == 10 {
+                    result += flash(Rc::clone(&octopus_grid), 0, row, column);
                 }
             }
         }
 
-        if !all_flash {
+        if !check_for_all_flash {
             if step == steps {
                 return result;
             }
         }
 
         finished = true;
-        for i in 0..10 {
-            for j in 0..10 {
-                if octopus_grid.borrow()[i][j] == -1 {
-                    octopus_grid.borrow_mut()[i][j] = 0;
+        for row in 0..10 {
+            for column in 0..10 {
+                if octopus_grid.borrow()[row][column] == -1 {
+                    octopus_grid.borrow_mut()[row][column] = 0;
                 } else {
                     finished = false;
                 }
             }
         }
 
-        if finished && all_flash {
+        if finished && check_for_all_flash {
             return step;
         }
     }
